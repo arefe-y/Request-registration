@@ -87,6 +87,6 @@ exports.passwordRecovery = async (req, res, next) => {
       throw error;
     }
   } catch (err) {
-    next(err);
+    next(err)
   }
 };

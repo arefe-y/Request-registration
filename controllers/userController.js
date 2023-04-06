@@ -122,7 +122,8 @@ exports.editProfile = async (req, res, next) => {
   }
 };
 
-exports.uploadProfilePhoto = (req, res) => {
+exports.uploadProfilePhoto =async (req, res,next) => {
+  let fileName;
   const upload = multer({
     limits: { fileSize: 4000000 },
     fileFilter,
@@ -135,7 +136,7 @@ exports.uploadProfilePhoto = (req, res) => {
       res.send(err);
     } else {
       if (req.file) {
-        const fileName = `${shortId.generate()}_${req.file.originalname}`;
+        fileName = `${shortId.generate()}_${req.file.originalname}`;
         await sharp(req.file.buffer)
           .jpeg({
             quality: 60,
@@ -150,4 +151,12 @@ exports.uploadProfilePhoto = (req, res) => {
       }
     }
   });
+
+  try {
+    const user = await User.findOne({ _id: req.payload.userId });
+
+    await user.updateOne({profilePhoto:fileName});
+  } catch (err) {
+    next(err)
+  }
 };

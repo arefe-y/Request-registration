@@ -14,5 +14,10 @@ router.post("/login", userController.handleLogin);
 //POST /users/pass-recovery
 router.post("/pass-recovery",userController.passwordRecovery)
 
+//POST /users/profile
+router.post("/profile",userController.editProfile)
+
 
 module.exports = router;
+
+

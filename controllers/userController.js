@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const { formatDate } = require("../utils/moment");
 
 const User = require("../models/User");
 
@@ -16,7 +17,11 @@ exports.createUser = async (req, res, next) => {
       error.statusCode = 422;
       throw error;
     } else {
-      await User.create({ fullname, phone, password });
+      await User.create({
+        fullname,
+        phone,
+        password,
+      });
       res.status(201).json({ message: "عضویت موفقیت آمیز بود" });
     }
   } catch (err) {
@@ -49,7 +54,7 @@ exports.handleLogin = async (req, res, next) => {
         },
         process.env.JWT_SECRET
       );
-      res.status(200).json({ token, userId: user._id.toString() });
+      res.status(200).json({ token});
     } else {
       const error = new Error("شماره تلفن یا رمز عبور اشتباه است");
       error.statusCode = 422;
@@ -87,6 +92,37 @@ exports.passwordRecovery = async (req, res, next) => {
       throw error;
     }
   } catch (err) {
-    next(err)
+    next(err);
+  }
+};
+
+exports.editProfile = async (req, res, next) => {
+  const { token } = req.body;
+  let userBirthDay;
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const user = await User.findOne({ _id: decoded.user.userId });
+    // console.log(user);
+
+    const { fullname, email, nationalCode } = req.body;
+
+    // if(nationalCode){
+    //   userBirthDay = formatDate(birthDate);
+    // }
+    
+
+    // user.fullname = fullname;
+    user.email = email;
+    // console.log(user.email);
+    // user.birthDate = userBirthDay;
+    // user.nationalCode= nationalCode;
+
+
+
+    await user.save();
+    res.status(200).json({ message: "حساب کاربری شما با موفقیت ویرایش شد" });
+  } catch (err) {
+    next(err);
   }
 };

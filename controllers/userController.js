@@ -51,8 +51,10 @@ exports.handleLogin = async (req, res, next) => {
             fullname: user.fullname,
             phone: user.phone,
           },
+          
         },
-        process.env.JWT_SECRET
+        process.env.JWT_SECRET,
+        {expiresIn:"24h"}
       );
       res.status(200).json({ token});
     } else {
@@ -67,32 +69,32 @@ exports.handleLogin = async (req, res, next) => {
 
 exports.passwordRecovery = async (req, res, next) => {
   let {oldPass, newPass } = req.body;
-  console.log(req.payload);
-  // try {
-  //   const user = await User.findOne({ _id: decoded.user.userId });
+  console.log(req.payload.userId);
+  try {
+    const user = await User.findOne({ _id: req.payload.userId});
 
-  //   const isEqual = await bcrypt.compare(oldPass, user.password);
-  //   console.log(isEqual);
+    const isEqual = await bcrypt.compare(oldPass, user.password);
+    console.log(isEqual);
 
-  //   if (isEqual) {
-  //     const hashedPassword = await new Promise((resolve, reject) => {
-  //       bcrypt.hash(newPass, 10, function (err, hash) {
-  //         if (err) reject(err);
-  //         resolve((newPass = hash));
-  //       });
-  //     });
+    if (isEqual) {
+      const hashedPassword = await new Promise((resolve, reject) => {
+        bcrypt.hash(newPass, 10, function (err, hash) {
+          if (err) reject(err);
+          resolve((newPass = hash));
+        });
+      });
 
-  //     await user.updateOne({ password: hashedPassword });
+      await user.updateOne({ password: hashedPassword });
 
-  //     res.status(200).json({ message: "بازیابی رمز عبور با موفقیت انجام شد" });
-  //   } else {
-  //     const error = new Error("رمز فعلی درست نمیباشد");
-  //     error.statusCode = 402;
-  //     throw error;
-  //   }
-  // } catch (err) {
-  //   next(err);
-  // }
+      res.status(200).json({ message: "بازیابی رمز عبور با موفقیت انجام شد" });
+    } else {
+      const error = new Error("رمز فعلی درست نمیباشد");
+      error.statusCode = 402;
+      throw error;
+    }
+  } catch (err) {
+    next(err);
+  }
 };
 
 exports.editProfile = async (req, res, next) => {

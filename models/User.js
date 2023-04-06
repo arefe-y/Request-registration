@@ -18,6 +18,18 @@ const userSchema=new mongoose.Schema({
         minlength:4,
         maxlength:10
     },
+    email:{
+        type:String
+    },
+    nationalnumber:{
+        type:Number
+    },
+    profilePhoto:{
+        type:String
+    },
+    birthDate:{
+        type:Date,
+    },
     createdAt:{
         type:Date,
         default:Date.now

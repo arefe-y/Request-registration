@@ -1,25 +1,28 @@
-const { userValidation } = require("../models/secure/userValidation");
+const { profileValidation } = require("../models/secure/profileValidation");
 const {
-  phoneNumberValidator,
   isPersian,
+  verifyIranianNationalId,
 } = require("@persian-tools/persian-tools");
 
-exports.validate = async (req, res, next) => {
+exports.pValidate = async (req, res, next) => {
   const errors = [];
   try {
-    await userValidation.validate(req.body, { abortEarly: false });
+    await profileValidation.validate(req.body, { abortEarly: false });
 
-    const validationOfPhoneNumber = phoneNumberValidator(req.body.phone);
-    if (validationOfPhoneNumber == false) {
-      const error = new Error("شماره تلفن همراه معتبر نمیباشد");
-      error.statusCode = 406;
-      throw error;
-    }
     const validationOffullName = isPersian(req.body.fullname);
     if (validationOffullName == false) {
       const error = new Error(
         "نام و نام خانوادگی را به زبان فارسی وارد نمایید"
       );
+      error.statusCode = 406;
+      throw error;
+    }
+
+    const validationOfNationalCode = verifyIranianNationalId(
+      req.body.nationalCode
+    );
+    if (validationOfNationalCode == false) {
+      const error = new Error("کد ملی وارد شده معتبر نمیباشد");
       error.statusCode = 406;
       throw error;
     }

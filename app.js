@@ -2,7 +2,6 @@ const express = require("express");
 const path = require("path");
 const dotEnv = require("dotenv");
 const mongoose = require("mongoose");
-
 const connectDB = require("./config/db");
 
 //Load Config

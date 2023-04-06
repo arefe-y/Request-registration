@@ -13,6 +13,4 @@ exports.userValidation = Yup.object().shape({
   confirmPassword: Yup.string()
     .required("تکرار کلمه عبور الزامی میباشد")
     .oneOf([Yup.ref("password"), null], "کلمه های عبور یکسان نیستند"),
-
-  email:Yup.string().email("ایمیل معتبر نمیباشد")
 });

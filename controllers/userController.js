@@ -1,8 +1,12 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { formatDate } = require("../utils/moment");
+const multer = require("multer");
+const sharp = require("sharp");
+const shortId = require("shortid");
 
 const User = require("../models/User");
+const { fileFilter } = require("../utils/multer");
 
 exports.createUser = async (req, res, next) => {
   try {
@@ -51,12 +55,11 @@ exports.handleLogin = async (req, res, next) => {
             fullname: user.fullname,
             phone: user.phone,
           },
-          
         },
         process.env.JWT_SECRET,
-        {expiresIn:"24h"}
+        { expiresIn: "24h" }
       );
-      res.status(200).json({ token});
+      res.status(200).json({ token });
     } else {
       const error = new Error("شماره تلفن یا رمز عبور اشتباه است");
       error.statusCode = 422;
@@ -67,14 +70,12 @@ exports.handleLogin = async (req, res, next) => {
   }
 };
 
-exports.passwordRecovery = async (req, res, next) => {
-  let {oldPass, newPass } = req.body;
-  console.log(req.payload.userId);
+exports.changePassword = async (req, res, next) => {
+  let { oldPass, newPass } = req.body;
   try {
-    const user = await User.findOne({ _id: req.payload.userId});
+    const user = await User.findOne({ _id: req.payload.userId });
 
     const isEqual = await bcrypt.compare(oldPass, user.password);
-    console.log(isEqual);
 
     if (isEqual) {
       const hashedPassword = await new Promise((resolve, reject) => {
@@ -98,32 +99,55 @@ exports.passwordRecovery = async (req, res, next) => {
 };
 
 exports.editProfile = async (req, res, next) => {
-  const { token } = req.body;
   let userBirthDay;
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findOne({ _id: req.payload.userId });
 
-    const user = await User.findOne({ _id: decoded.user.userId });
-    // console.log(user);
+    const { fullname, email, nationalCode, birthDate } = req.body;
 
-    const { fullname, email, nationalCode } = req.body;
+    if (birthDate) {
+      userBirthDay = formatDate(birthDate);
+    }
 
-    // if(nationalCode){
-    //   userBirthDay = formatDate(birthDate);
-    // }
-    
-
-    // user.fullname = fullname;
+    user.fullname = fullname;
     user.email = email;
-    // console.log(user.email);
-    // user.birthDate = userBirthDay;
-    // user.nationalCode= nationalCode;
+    user.birthDate = userBirthDay;
+    user.nationalCode = nationalCode;
 
+    await user.updateOne({ email, fullname, birthDate, nationalCode });
 
-
-    await user.save();
     res.status(200).json({ message: "حساب کاربری شما با موفقیت ویرایش شد" });
   } catch (err) {
     next(err);
   }
+};
+
+exports.uploadProfilePhoto = (req, res) => {
+  const upload = multer({
+    limits: { fileSize: 4000000 },
+    fileFilter,
+  }).single("image");
+
+  upload(req, res, async(err) => {
+    console.log(req.file);
+    if (err) {
+      console.log(err);
+      res.send(err);
+    } else {
+      if (req.file) {
+        const fileName = `${shortId.generate()}_${req.file.originalname}`;
+        await sharp(req.file.buffer)
+          .jpeg({
+            quality: 60,
+          })
+          .toFile(`./public/uploads/${fileName}`)
+          .catch((err) => console.log(err));
+        res
+          .status(200)
+          .json({ image: `http://localhost:3000/uploads/${fileName}` });
+      } else {
+        res.status(400).json({ error: "جهت آپلود باید عکسی انتخاب کنید" });
+      }
+    }
+  });
 };

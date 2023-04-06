@@ -29,4 +29,13 @@ router.post(
 //POST /users/upload-photo
 router.post("/upload-photo", authenticated,userController.uploadProfilePhoto);
 
+//POST /users/forget-password
+router.post("/forget-password",userController.forgetPassword)
+
+//POST /users/reset-password/:token
+router.post("/reset-password/:token",userController.resetPassword)
+
+//POST /users/reset-password/:id
+router.post("/reset-pass/:id",userController.handleResetPassword)
+
 module.exports = router;

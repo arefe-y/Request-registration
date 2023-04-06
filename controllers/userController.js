@@ -122,14 +122,14 @@ exports.editProfile = async (req, res, next) => {
   }
 };
 
-exports.uploadProfilePhoto =async (req, res,next) => {
+exports.uploadProfilePhoto = async (req, res, next) => {
   let fileName;
   const upload = multer({
     limits: { fileSize: 4000000 },
     fileFilter,
   }).single("image");
 
-  upload(req, res, async(err) => {
+  upload(req, res, async (err) => {
     console.log(req.file);
     if (err) {
       console.log(err);
@@ -155,8 +155,70 @@ exports.uploadProfilePhoto =async (req, res,next) => {
   try {
     const user = await User.findOne({ _id: req.payload.userId });
 
-    await user.updateOne({profilePhoto:fileName});
+    await user.updateOne({ profilePhoto: fileName });
   } catch (err) {
-    next(err)
+    next(err);
   }
+};
+
+exports.forgetPassword = async (req, res, next) => {
+  try {
+    const { phone } = req.body;
+
+    const user = await User.findOne({ phone });
+
+    if (!user) {
+      res.status(406).json({
+        error: "کاربری با این شماره موبایل در پایگاه داده وجود ندارد",
+      });
+    } else {
+      const token = jwt.sign(
+        {
+          user: {
+            userId: user._id.toString(),
+          },
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: "24h" }
+      );
+
+      const resetLink = `http://localhost:3000/users/reset-password/${token}`;
+
+      res.status(200).json({ resetLink });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.resetPassword = (req, res, next) => {
+  const token = req.params.token;
+  const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+
+  if (!decodedToken) {
+    res.status(404).json({ error: "404" });
+  } else {
+    const id = decodedToken.user.userId;
+    const resetLink = `http://localhost:3000/users/reset-pass/${id}`;
+    res.status(200).json({ resetLink });
+  }
+};
+
+exports.handleResetPassword = async (req, res) => {
+  const { password, confirmPassword } = req.body;
+
+  if (password !== confirmPassword) {
+    res.status(406).json({ error: "کلمه های عبور یکسان نیستند" });
+  }
+
+  const user = await User.findOne({ _id: req.params.id });
+
+  if (!user) {
+    res.status(404).json({ error: "404" });
+  }
+
+  user.password = password;
+  await user.save();
+
+  res.status(200).json({ error: "پسوورد شما با موفقیت بروزرسانی شد" });
 };

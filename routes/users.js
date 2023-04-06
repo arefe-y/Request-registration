@@ -2,6 +2,7 @@ const { Router } = require("express");
 
 const userController = require("../controllers/userController");
 const { validate } = require("../middleware/userValidations");
+const {authenticated}=require('../middleware/auth');
 
 const router = new Router();
 
@@ -12,7 +13,7 @@ router.post("/register", validate, userController.createUser);
 router.post("/login", userController.handleLogin);
 
 //POST /users/pass-recovery
-router.post("/pass-recovery",userController.passwordRecovery)
+router.post("/pass-recovery",authenticated,userController.passwordRecovery)
 
 //POST /users/profile
 router.post("/profile",userController.editProfile)

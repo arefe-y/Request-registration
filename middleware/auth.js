@@ -1,16 +1,17 @@
 const jwt = require("jsonwebtoken");
 
 exports.authenticated = (req, res, next) => {
-  const authHeader = req.get("Authorization");
+    const bearerHeader = req.headers['authorization'];
+    console.log(bearerHeader);
 
   try {
-    if (!authHeader) {
+    if (!bearerHeader) {
       const error = new Error("مجوز کافی ندارید");
       error.statusCode = 401;
       throw error;
     }
 
-    const token = authHeader.split(" ")[1];
+    const token = bearerHeader.split(" ")[1];
 
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
@@ -19,7 +20,7 @@ exports.authenticated = (req, res, next) => {
       error.statusCode = 401;
       throw error;
     }
-    req.userId = decodedToken.user.userId;
+    req.payload.userId = decodedToken.user.userId;
     next();
   } catch (err) {
     next(err);

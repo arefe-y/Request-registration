@@ -8,7 +8,7 @@ const userSchema=new mongoose.Schema({
         trim:true
     },
     phone:{
-        type:Number,
+        type:String,
         required:true,
         unique:true
     },
@@ -19,16 +19,20 @@ const userSchema=new mongoose.Schema({
         maxlength:10
     },
     email:{
-        type:String
+        type:String,
+        default:null
     },
-    nationalnumber:{
-        type:Number
+    nationalCode:{
+        type:String,
+        default:null
     },
     profilePhoto:{
-        type:String
+        type:String,
+        default:null
     },
     birthDate:{
         type:Date,
+        default:null
     },
     createdAt:{
         type:Date,

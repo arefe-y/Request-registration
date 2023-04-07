@@ -1,4 +1,4 @@
-const { userValidation } = require("../models/secure/userValidation");
+const { userValidation } = require("../models/secure/UserValidation");
 const {
   phoneNumberValidator,
   isPersian,

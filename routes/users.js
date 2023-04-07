@@ -2,9 +2,9 @@ const { Router } = require("express");
 const multer=require('multer');
 
 const userController = require("../controllers/userController");
-const { validate } = require("../middleware/userValidations");
+const { validate } = require("../middleware/UserValidations");
 const { authenticated } = require("../middleware/auth");
-const { pValidate } = require("../middleware/profileValidation");
+const { pValidate } = require("../middleware/ProfileValidation");
 
 const router = new Router();
 const upload=multer()

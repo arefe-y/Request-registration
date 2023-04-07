@@ -1,12 +1,12 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const { formatDate } = require("../utils/moment");
+const { formatDate } = require("../utils/Moment");
 const multer = require("multer");
 const sharp = require("sharp");
 const shortId = require("shortid");
 
 const User = require("../models/User");
-const { fileFilter } = require("../utils/multer");
+const { fileFilter } = require("../utils/Multer");
 
 exports.createUser = async (req, res, next) => {
   try {

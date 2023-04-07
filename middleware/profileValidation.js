@@ -1,4 +1,4 @@
-const { profileValidation } = require("../models/secure/profileValidation");
+const { profileValidation } = require("../models/secure/ProfileValidation");
 const {
   isPersian,
   verifyIranianNationalId,

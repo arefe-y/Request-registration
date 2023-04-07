@@ -16,13 +16,13 @@ const TreceiptSchema = new mongoose.Schema({
     },
     wallet: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "wallet",
+        ref: "Wallet",
     },
     order: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "order",
+        ref: "Order",
     },
 })
 
 
-module.exports = mongoose.model("transactionReceipt", TreceiptSchema)
+module.exports = mongoose.model("TransactionReceipt", TreceiptSchema)

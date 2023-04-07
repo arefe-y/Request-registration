@@ -13,11 +13,11 @@ router.post("/register", validate, userController.createUser);
 //POST /users/login
 router.post("/login", userController.handleLogin);
 
-//POST /users/change-pass
-router.post("/change-pass", authenticated, userController.changePassword);
+//PUT /users/change-pass
+router.put("/change-pass", authenticated, userController.changePassword);
 
-//POST /users/edit-profile
-router.post(
+//PUT /users/edit-profile
+router.put(
   "/edit-profile",
   authenticated,
   pValidate,
@@ -33,7 +33,7 @@ router.post("/forget-password",userController.forgetPassword)
 //POST /users/reset-password/:token
 router.post("/reset-password/:token",userController.resetPassword)
 
-//POST /users/reset-password/:id
-router.post("/reset-pass/:id",userController.handleResetPassword)
+//PUT /users/reset-password/:id
+router.put("/reset-pass/:id",userController.handleResetPassword)
 
 module.exports = router;

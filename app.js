@@ -6,6 +6,7 @@ const connectDB = require("./config/db");
 
 //Load Config
 dotEnv.config({ path: "./config/config.env" });
+const {errorHandler}=require('./middleware/Errors');
 
 //Database Connection
 connectDB();
@@ -20,9 +21,12 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 //routes
-app.use("/users", require("./routes/users"));
+app.use("/users", require("./routes/Users"));
 app.use("/wallet", require("./routes/Wallet"));
 app.use("/orders", require("./routes/Order"));
+
+//error controller
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server is running ... on port : ${PORT}`));

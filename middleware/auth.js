@@ -18,6 +18,8 @@ exports.authenticated = (req, res, next) => {
       const error = new Error("شما مجوز کافی ندارید !");
       error.statusCode = 401;
       throw error;
+
+      
     }
 
     req.payload={}

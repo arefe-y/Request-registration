@@ -13,6 +13,10 @@ const orderSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    uniqueCode:{
+        type:String,
+        required:true
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",

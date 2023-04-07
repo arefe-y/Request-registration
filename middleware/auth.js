@@ -22,6 +22,7 @@ exports.authenticated = (req, res, next) => {
 
     req.payload={}
     req.payload.userId = decodedToken.user.userId;
+    req.payload.role=decodedToken.user.role
     next();
   } catch (err) {
     next(err);

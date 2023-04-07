@@ -54,6 +54,7 @@ exports.handleLogin = async (req, res, next) => {
             userId: user._id.toString(),
             fullname: user.fullname,
             phone: user.phone,
+            role:user.role
           },
         },
         process.env.JWT_SECRET,

@@ -1,13 +1,11 @@
 const { Router } = require("express");
-const multer=require('multer');
 
-const userController = require("../controllers/userController");
+const userController = require("../controllers/UserController");
 const { validate } = require("../middleware/UserValidations");
-const { authenticated } = require("../middleware/auth");
+const { authenticated } = require("../middleware/Auth");
 const { pValidate } = require("../middleware/ProfileValidation");
 
 const router = new Router();
-const upload=multer()
 
 //POST /users/register
 router.post("/register", validate, userController.createUser);

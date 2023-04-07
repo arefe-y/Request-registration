@@ -30,6 +30,10 @@ const userSchema=new mongoose.Schema({
         type:String,
         default:null
     },
+    role:{
+        type:String,
+        default:2
+    },
     birthDate:{
         type:Date,
         default:null

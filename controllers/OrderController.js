@@ -5,17 +5,16 @@ const Counter = require('../models/Counter');
 
 
 exports.newOrder = async (req, res, next) => {
-    const { title, description } = req.body
+    const { title, description,amount } = req.body
     let dbcounter = []
 
     try {
         const wallet = await Wallet.findOne({ user: req.payload.userId })
-
         if (!wallet) {
             return res.status(400).json({ error: "لطفا ابتدا کیف پول خود را شارژ نمایید" })
         } else {
-            if (wallet.Amount >= 500000) {
-                const updateAmount = wallet.Amount - 500000
+            if (wallet.Amount >= amount) {
+                const updateAmount = wallet.Amount - amount
 
                 const date = new Date()
                 const year = date.getFullYear()
@@ -40,7 +39,7 @@ exports.newOrder = async (req, res, next) => {
                 })
 
                 const orderReciept = await TransactionReceipt.create({
-                    Amount: 500000,
+                    Amount: amount,
                     status: "successful",
                     wallet: wallet._id,
                     order: createNewOrder._id
@@ -64,16 +63,18 @@ exports.newOrder = async (req, res, next) => {
 }
 
 exports.recieptReport = async (req, res) => {
+    let result=[];
     const wallet = await Wallet.findOne({ user: req.payload.userId })
     const TReciepts = await TransactionReceipt.find({ $and: [{ wallet: wallet._id }, { status: "successful" }] })
 
     if (TReciepts.length > 0) {
         TReciepts.forEach(Treciept => {
-            const amount = Treciept.Amount
-            const status = Treciept.status
-            const date = Treciept.date
-            res.status(200).json({ amount, status, date })
+            result.push(Treciept.Amount)
+            result.push(Treciept.status)
+            result.push(Treciept.date)
+
         });
+        res.status(200).json({ result })
 
     } else {
         res.status(403).json({ message: "رسیدی در پایگاه داده برای شما وجود ندارد" })

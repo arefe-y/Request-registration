@@ -1,0 +1,414 @@
+{
+	"info": {
+		"_postman_id": "708e8fb5-11cd-4c0a-8c1a-278e45103e53",
+		"name": "request_registration",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25998307"
+	},
+	"item": [
+		{
+			"name": "/users/register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"fullname\":\"عارفه یوسفی\",\r\n    \"phone\":\"09013712700\",\r\n    \"password\":\"1234\",\r\n    \"confirmPassword\":\"1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/users/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/users/login",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJJZCI6IjY0MmVjNzBmMDM3MTgxOTc4M2JmMThmZSIsImZ1bGxuYW1lIjoi2LnYp9ix2YHZhyDbjNmI2LPZgduMIiwicGhvbmUiOiIwOTAxMzcxMjcwMCJ9LCJpYXQiOjE2ODA3ODkzNjZ9.YKyjIg0pkdd5hjXuwk1s5aYUL69HlUFN3ut4Bnnlil8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"phone\":\"09013712700\",\r\n    \"password\":\"1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/users/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/users/change-pass",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJJZCI6IjY0MzE1NzI0ODc3NDhkZGIxN2ZiMTRkYyIsImZ1bGxuYW1lIjoi2LnYp9ix2YHZhyDbjNmI2LPZgduMIiwicGhvbmUiOiIwOTAxMzcxMjcwMCJ9LCJpYXQiOjE2ODA5NTU2NjksImV4cCI6MTY4MTA0MjA2OX0.MPGZ1PZV7wf-qKUXh9YGzwou3puwoR-jB2aSUruVhyo",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"oldPass\":\"1234\",\r\n    \"newPass\":\"12345\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/users/change-pass",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users",
+						"change-pass"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/users/edit-profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJJZCI6IjY0MzE1NzI0ODc3NDhkZGIxN2ZiMTRkYyIsImZ1bGxuYW1lIjoi2LnYp9ix2YHZhyDbjNmI2LPZgduMIiwicGhvbmUiOiIwOTAxMzcxMjcwMCJ9LCJpYXQiOjE2ODA5NjM2NDksImV4cCI6MTY4MTA1MDA0OX0.D2mENsf0mCVGBbiv6VYXVZXrXhizTcVWJ7QijV0ItBU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"arefeh.yousefi98@gmail.com\",\r\n    \"fullname\":\"عارفه\",\r\n    \"birthDate\":\"1999-04-03\",\r\n    \"nationalCode\":\"2240233117\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/users/edit-profile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users",
+						"edit-profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/users/upload-photo",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJJZCI6IjY0MzE1NzI0ODc3NDhkZGIxN2ZiMTRkYyIsImZ1bGxuYW1lIjoi2LnYp9ix2YHZhyDbjNmI2LPZgduMIiwicGhvbmUiOiIwOTAxMzcxMjcwMCJ9LCJpYXQiOjE2ODA5NTY5OTcsImV4cCI6MTY4MTA0MzM5N30.OMPeKhBPnt4hD7NXkM3MB6788BFG6pqpm7xJOTNUBGE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/C:/Users/ASUS/Desktop/gym/3.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/users/upload-photo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users",
+						"upload-photo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/users/forget-password",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"phone\":\"09013712700\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/users/forget-password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users",
+						"forget-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/users/reset-password/:token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/users/reset-password/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJJZCI6IjY0MzE1NzI0ODc3NDhkZGIxN2ZiMTRkYyJ9LCJpYXQiOjE2ODA5NTgyMjUsImV4cCI6MTY4MTA0NDYyNX0.DA_qmUIKvFziG4vUhGDnOTm1_8UracXrBhuzGWm8MI0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users",
+						"reset-password",
+						"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJJZCI6IjY0MzE1NzI0ODc3NDhkZGIxN2ZiMTRkYyJ9LCJpYXQiOjE2ODA5NTgyMjUsImV4cCI6MTY4MTA0NDYyNX0.DA_qmUIKvFziG4vUhGDnOTm1_8UracXrBhuzGWm8MI0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/users/reset-pass/:id",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"password\":\"123456\",\r\n    \"confirmPassword\":\"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/users/reset-pass/6431572487748ddb17fb14dc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users",
+						"reset-pass",
+						"6431572487748ddb17fb14dc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/wallet/charge",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJJZCI6IjY0MzE1NzI0ODc3NDhkZGIxN2ZiMTRkYyIsImZ1bGxuYW1lIjoi2LnYp9ix2YHZhyDbjNmI2LPZgduMIiwicGhvbmUiOiIwOTAxMzcxMjcwMCJ9LCJpYXQiOjE2ODA5NTg1OTIsImV4cCI6MTY4MTA0NDk5Mn0.bJaCrbeui0g0WaMYTFwjkPdxo0ql_ActVU1cgI9guXQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Amount\":500000000\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/wallet/charge",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"wallet",
+						"charge"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/orders/new-order",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJJZCI6IjY0MzE1NzI0ODc3NDhkZGIxN2ZiMTRkYyIsImZ1bGxuYW1lIjoi2LnYp9ix2YHZhyDbjNmI2LPZgduMIiwicGhvbmUiOiIwOTAxMzcxMjcwMCJ9LCJpYXQiOjE2ODA5NTg1OTIsImV4cCI6MTY4MTA0NDk5Mn0.bJaCrbeui0g0WaMYTFwjkPdxo0ql_ActVU1cgI9guXQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\":\"عنوان تست اول\",\r\n    \"description\":\"توضیحات تست اول\",\r\n    \"amount\":20000\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/orders/new-order",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"orders",
+						"new-order"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/wallet/report",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJJZCI6IjY0MzE1NzI0ODc3NDhkZGIxN2ZiMTRkYyIsImZ1bGxuYW1lIjoi2LnYp9ix2YHZhyDbjNmI2LPZgduMIiwicGhvbmUiOiIwOTAxMzcxMjcwMCJ9LCJpYXQiOjE2ODA5NTg1OTIsImV4cCI6MTY4MTA0NDk5Mn0.bJaCrbeui0g0WaMYTFwjkPdxo0ql_ActVU1cgI9guXQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/wallet/report",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"wallet",
+						"report"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/orders/report",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJJZCI6IjY0MzE1NzI0ODc3NDhkZGIxN2ZiMTRkYyIsImZ1bGxuYW1lIjoi2LnYp9ix2YHZhyDbjNmI2LPZgduMIiwicGhvbmUiOiIwOTAxMzcxMjcwMCJ9LCJpYXQiOjE2ODA5NTg1OTIsImV4cCI6MTY4MTA0NDk5Mn0.bJaCrbeui0g0WaMYTFwjkPdxo0ql_ActVU1cgI9guXQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/orders/report",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"orders",
+						"report"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

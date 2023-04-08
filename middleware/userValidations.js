@@ -7,13 +7,14 @@ const {
 exports.validate = async (req, res, next) => {
   const errors = [];
   try {
-    await userValidation.validate(req.body, { abortEarly: false });
+
 
     const validationOfPhoneNumber = phoneNumberValidator(req.body.phone);
     if (validationOfPhoneNumber == false) {
       const error = new Error("شماره تلفن همراه معتبر نمیباشد");
       error.statusCode = 406;
-      throw error;
+      const message=error.message
+      errors.push({message})
     }
     const validationOffullName = isPersian(req.body.fullname);
     if (validationOffullName == false) {
@@ -21,7 +22,16 @@ exports.validate = async (req, res, next) => {
         "نام و نام خانوادگی را به زبان فارسی وارد نمایید"
       );
       error.statusCode = 406;
-      throw error;
+      const message=error.message
+      errors.push({message})
+    }
+    await userValidation.validate(req.body, { abortEarly: false });
+    
+    if(errors.length>0){
+      const error = new Error("خطا در اعتبارسنجی");
+      error.statusCode = 422;
+      error.data = errors;
+      next(error);
     }
 
     next();
@@ -33,8 +43,8 @@ exports.validate = async (req, res, next) => {
         message: e,
       });
     });
-    const error = new Error();
-    error.statusCode = 406;
+    const error = new Error("خطا در اعتبارسنجی");
+    error.statusCode = 422;
     error.data = errors;
     next(error);
   }

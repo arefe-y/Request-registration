@@ -4,6 +4,7 @@ const { formatDate } = require("../utils/Moment");
 const multer = require("multer");
 const sharp = require("sharp");
 const shortId = require("shortid");
+const { phoneNumberValidator } = require('@persian-tools/persian-tools');
 
 const User = require("../models/User");
 const { fileFilter } = require("../utils/Multer");
@@ -40,12 +41,19 @@ exports.handleLogin = async (req, res, next) => {
     const user = await User.findOne({ phone });
 
     if (!user) {
-      const error = new Error("کاربری با این شماره موبایل یافت نشد");
-      error.statusCode = 404;
+      const error = new Error("شماره تلفن یا رمز عبور اشتباه است");
+      error.statusCode = 401;
       throw error;
     }
 
     const isEqual = await bcrypt.compare(password, user.password);
+
+    if (isEqual == false) {
+
+      const error = new Error("شماره تلفن یا رمز عبور اشتباه است");
+      error.statusCode = 401;
+      throw error;
+    }
 
     if (isEqual) {
       const token = jwt.sign(
@@ -54,17 +62,13 @@ exports.handleLogin = async (req, res, next) => {
             userId: user._id.toString(),
             fullname: user.fullname,
             phone: user.phone,
-            role:user.role
+            role: user.role
           },
         },
         process.env.JWT_SECRET,
         { expiresIn: "24h" }
       );
       res.status(200).json({ token });
-    } else {
-      const error = new Error("شماره تلفن یا رمز عبور اشتباه است");
-      error.statusCode = 422;
-      throw error;
     }
   } catch (err) {
     next(err);
@@ -91,7 +95,7 @@ exports.changePassword = async (req, res, next) => {
       res.status(200).json({ message: "بازیابی رمز عبور با موفقیت انجام شد" });
     } else {
       const error = new Error("رمز فعلی درست نمیباشد");
-      error.statusCode = 402;
+      error.statusCode = 403;
       throw error;
     }
   } catch (err) {
@@ -116,6 +120,7 @@ exports.editProfile = async (req, res, next) => {
     user.nationalCode = nationalCode;
 
     await user.updateOne({ email, fullname, birthDate, nationalCode });
+    // await user.save()
 
     res.status(200).json({ message: "حساب کاربری شما با موفقیت ویرایش شد" });
   } catch (err) {
@@ -131,9 +136,7 @@ exports.uploadProfilePhoto = async (req, res, next) => {
   }).single("image");
 
   upload(req, res, async (err) => {
-    console.log(req.file);
     if (err) {
-      console.log(err);
       res.send(err);
     } else {
       if (req.file) {
@@ -146,7 +149,7 @@ exports.uploadProfilePhoto = async (req, res, next) => {
           .catch((err) => console.log(err));
         res
           .status(200)
-          .json({ image: `http://localhost:3000/uploads/${fileName}` });
+          .json({ message: "آپلود عکی موفقیت آمیز بود" });
       } else {
         res.status(400).json({ error: "جهت آپلود باید عکسی انتخاب کنید" });
       }
@@ -166,12 +169,21 @@ exports.forgetPassword = async (req, res, next) => {
   try {
     const { phone } = req.body;
 
+    const userPhone = phoneNumberValidator(phone)
+
+    if (userPhone == false) {
+      const error = new Error("شماره موبایل معتبر نمباشد")
+      error.statusCode = 406
+      throw error
+    }
+
     const user = await User.findOne({ phone });
 
     if (!user) {
-      res.status(406).json({
-        error: "کاربری با این شماره موبایل در پایگاه داده وجود ندارد",
-      });
+      const error = new Error("کاربری با این شماره موبایل در پایگاه داده وجود ندارد")
+      error.statusCode = 406
+      throw error
+
     } else {
       const token = jwt.sign(
         {
@@ -205,21 +217,29 @@ exports.resetPassword = (req, res, next) => {
   }
 };
 
-exports.handleResetPassword = async (req, res) => {
-  const { password, confirmPassword } = req.body;
+exports.handleResetPassword = async (req, res,next) => {
 
-  if (password !== confirmPassword) {
-    res.status(406).json({ error: "کلمه های عبور یکسان نیستند" });
+  try {
+    const { password, confirmPassword } = req.body;
+
+    if (password !== confirmPassword) {
+      const error = new Error("کلمه های عبور یکسان نیستند" )
+      error.statusCode = 406
+      throw error
+    }
+  
+    const user = await User.findOne({ _id: req.params.id });
+  
+    if (!user) {
+      res.status(404).json({ error: "404" });
+    }
+  
+    user.password = password;
+    await user.save();
+  
+    res.status(200).json({ error: "پسوورد شما با موفقیت بروزرسانی شد" });
+  } catch (err) {
+    next(err)
   }
 
-  const user = await User.findOne({ _id: req.params.id });
-
-  if (!user) {
-    res.status(404).json({ error: "404" });
-  }
-
-  user.password = password;
-  await user.save();
-
-  res.status(200).json({ error: "پسوورد شما با موفقیت بروزرسانی شد" });
 };

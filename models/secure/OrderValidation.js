@@ -9,4 +9,5 @@ exports.orderValidation = Yup.object().shape({
         .required("وارد کردن توضیحات الزامی میباشد")
         .min(5, "توضیحات نباید کمتر از 5 کاراکتر باشد")
         .max(255, "توضیحات نباید بیشتر از 255 کاراکتر باشد"),
+    amount:Yup.number().required("وارد کردن مبلغ الزامی میباشد")
 });

@@ -5,13 +5,13 @@ const Counter = require('../models/Counter');
 
 
 exports.newOrder = async (req, res, next) => {
-    const { title, description,amount } = req.body
+    const { title, description, amount } = req.body
     let dbcounter = []
 
     try {
         const wallet = await Wallet.findOne({ user: req.payload.userId })
         if (!wallet) {
-            return res.status(400).json({ error: "لطفا ابتدا کیف پول خود را شارژ نمایید" })
+            return res.status(402).json({ error: "لطفا ابتدا کیف پول خود را شارژ نمایید" })
         } else {
             if (wallet.Amount >= amount) {
                 const updateAmount = wallet.Amount - amount
@@ -26,8 +26,6 @@ exports.newOrder = async (req, res, next) => {
                     dbcounter = await Counter.find()
                 }
                 const code = `${year}-${month}-${dbcounter[0].counter}`
-
-
 
                 await wallet.updateOne({ Amount: updateAmount })
 
@@ -49,13 +47,10 @@ exports.newOrder = async (req, res, next) => {
 
                 res.status(200).json({ message: "درخواست شما با موفقیت ثبت شد" })
             } else {
-                res.status(406).json({ message: "موجودی کیف پول شما برای ثبت درخواست کافی نمیباشد لطفا نسبت به شارژ کیف پول خود اقدام نمایید " })
+                res.status(402).json({ message: "موجودی کیف پول شما برای ثبت درخواست کافی نمیباشد لطفا نسبت به شارژ کیف پول خود اقدام نمایید " })
             }
 
         }
-
-
-
 
     } catch (err) {
         next(err)
@@ -63,20 +58,20 @@ exports.newOrder = async (req, res, next) => {
 }
 
 exports.recieptReport = async (req, res) => {
-    let result=[];
+    let result = [];
     const wallet = await Wallet.findOne({ user: req.payload.userId })
-    const TReciepts = await TransactionReceipt.find({ $and: [{ wallet: wallet._id }, { status: "successful" }] })
-
+    const TReciepts = await TransactionReceipt.find({ $and: [{ wallet: wallet._id }, { status: "successful" }] }).populate("order")
+    console.log(TReciepts);
     if (TReciepts.length > 0) {
-        TReciepts.forEach(Treciept => {
-            result.push(Treciept.Amount)
-            result.push(Treciept.status)
-            result.push(Treciept.date)
+        //     TReciepts.forEach(Treciept => {
+        //         result.push(Treciept.Amount)
+        //         result.push(Treciept.status)
+        //         result.push(Treciept.date)
 
-        });
-        res.status(200).json({ result })
+        //     });
+        res.status(200).json({ TReciepts })
 
     } else {
-        res.status(403).json({ message: "رسیدی در پایگاه داده برای شما وجود ندارد" })
+        res.status(402).json({ message: "رسیدی در پایگاه داده برای شما وجود ندارد" })
     }
 }

@@ -31,7 +31,7 @@ exports.orderValidate = async (req, res, next) => {
         message: e,
       });
     });
-    const error = new Error();
+    const error = new Error("خطا در اعتبار سنجی");
     error.statusCode = 406;
     error.data = errors;
     next(error);
